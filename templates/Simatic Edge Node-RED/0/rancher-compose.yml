@@ -1,0 +1,72 @@
+.catalog:
+  name: "sim-edge-platform-node-red" # Name of the versioned template of the Catalog Entry
+  version: "v0.9.7.21 - build" # Version of the versioned template of the Catalog Entry
+  description: "latest node-red build of Siemens." # Description of the versioned template of the Catalog Entry
+  uuid: ff641c1c-aeac-4427-9e93-4818b88103a6 # Unique identifier to be used for upgrades. Please see note.
+  minimum_rancher_version: v1.1.1 # The minimum version of Rancher that supports the template
+  questions: #Used to request user input for configuration options
+    - variable: "container_name"
+      label: "Container Name"
+      description: "Name of the container to be deployed."
+      default: "sim-edge-platform-node-red"
+      required: true
+      type: "string"
+    - variable: "app_user"
+      label: "Container User"
+      description: "Container User to run Node-RED."
+      default: "nodered"
+      required: true
+      type: "string"
+    - variable: "host_user"
+      label: "Host User"
+      description: "Host Machine User to Mount the Volumes."
+      default: "edge"
+      required: true
+      type: "string"
+    - variable: "public_port"
+      label: "Port"
+      description: "External port to access Node-RED"
+      default: 1880
+      required: true
+      type: "int"
+    - variable: "app_default_pass"
+      label: "Node-RED Default Password"
+      description: "Node-RED Default Password"
+      default: "admin123"
+      required: true
+      type: "string"
+    - variable: "Scale"
+      label: "Scale"
+      description: "Number of running instaces."
+      default: 1
+      required: true
+      type: "int"
+    - variable: "http_proxy"
+      label: "Environment's http proxy"
+      description: "Environment's http proxy"
+      default: "http://194.138.0.25:9400"
+      required: false
+      type: "string"
+    - variable: "https_proxy"
+      label: "Environment's https proxy"
+      description: "Environment's https proxy"
+      default: "http://194.138.0.25:9400"
+      required: false
+      type: "string"
+    - variable: "no_proxy"
+      label: "Environment's no proxy"
+      description: "Environment's http proxy"
+      default: "localhost,127.0.0.1,10.*,192.168.*,siemens.net,*siemens.com,*siemens.de,*compute.internal,*.servicediscovery.internal,10.130.32*,10.130.63.*,39.22.228.167:5000"
+      required: false
+      type: "string"
+  services:
+    sim-edge-platform-node-red:
+      scale: ${Scale}
+      retain_ip: true
+      health_check:
+        port: 80
+        interval: 5000
+        unhealthy_threshold: 3
+        request_line: 'GET / HTTP/1.0'
+        healthy_threshold: 2
+        response_timeout: 5000

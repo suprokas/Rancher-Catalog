@@ -1,0 +1,17 @@
+version: '2'
+services:
+    
+ sim-edge-platform-node-red:
+    image: "artifactory-test.siemens.net:8084/simatic_edge/releases/sim-edge-platform-node-red/sim-edge-platform-node-red:0.9.7.21"
+    container_name: ${container_name}
+    ports:
+     - ${public_port}:1880 
+    user: ${app_user}:${app_user}
+    volumes:
+     - /home/${host_user}/sim-edge-data/sim-edge-platform-node-red:/home/nodered/node-red-home
+     - /home/${host_user}/.ssh/:/home/nodered/.ssh
+    environment:
+     - SIM_EDGE_NODERED_PASS=${app_default_pass}
+     - http_proxy=${http_proxy}
+     - https_proxy=${https_proxy}
+     - no_proxy=${no_proxy}
